@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# SCRIPT TO REMOVE TEMPORARY FILES CREATES BY TESTS OR SAMPLE RUNS
+
+# change the current working directory to the parent directory of this script
+# (and return error code 1 if this doesn't work for any reason)
+cd "${0%/*}" || exit 1
+
+rm converted_mesh_test.mesh
+rm converted_mesh.mesh
+
+# More in detail:
+# $0	0-th argument (i.e. the path that called the script)
+# %	is a pattern matching operator: VAR%PATTERN removes from VAR the SHORTEST occurrent of PATTERN
+#	therefore %/* matches the LAST occurrence of '/' and removes anything ('*') after it
+#	(i.e. it removes the name of the script from the path that called this script)
+# Written in a WRONG but readable way (i.e. it doesn't work, but it's easier to understand), this would be
+# $0 % /*
+# Since this requires parameter expansion, the {} are needed: ${0%/*}
+# As always, use the "..." to stay safe and avoid unwanted expansions
