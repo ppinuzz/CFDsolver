@@ -21,3 +21,8 @@ COORDINATES
 0.1
 0.2
 ```
+
+## Commit messages legend ##
+
+- `TST`: concerns tests
+- `DOC`: concerns documentation

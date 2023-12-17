@@ -1,6 +1,18 @@
-#!/bin/python3
-
 def read_mesh(mesh_file):
+    """
+    Read 1D mesh from plain text file and import it
+
+    Parameters
+    ----------
+    mesh_file : string
+        Name of the mesh file
+
+    Returns
+    -------
+    mesh : array
+        1D mesh
+
+    """
     
     import numpy as np
     
@@ -50,7 +62,7 @@ def read_mesh(mesh_file):
     mesh = np.array(mesh)
     
     return mesh
-
+    
 
 #%% PROVA
 
