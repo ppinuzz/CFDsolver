@@ -66,6 +66,23 @@ def read_mesh(mesh_file):
 
 
 def convert_raw_mesh(raw_mesh_file, mesh_file, unit):
+    """
+    Convert raw coordinates into mesh format
+
+    Parameters
+    ----------
+    raw_mesh_file : string
+        Name of the file containing raw coordinates
+    mesh_file : string
+        Name of the converted mesh file
+    unit : string
+        Unit of measure (e.g. 'meter')
+
+    Returns
+    -------
+    None.
+
+    """
     
     with open(raw_mesh_file, 'r') as file:
         # read without removing newlines \n
