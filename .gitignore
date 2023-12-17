@@ -1,2 +1,3 @@
 # compiled files created by Python
 .pyc
+__pycache__
