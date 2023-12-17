@@ -62,10 +62,34 @@ def read_mesh(mesh_file):
     mesh = np.array(mesh)
     
     return mesh
+
+
+
+def convert_raw_mesh(raw_mesh_file, mesh_file, unit):
     
+    with open(raw_mesh_file, 'r') as file:
+        # read without removing newlines \n
+        lines = file.readlines()
+    
+    with open(mesh_file, 'w') as file:
+        file.write('UNIT\n')
+        file.write(unit + '\n\n')
+        file.write('COORDINATES\n')
+        # since newlines are still there, simply concatenate all the elements
+        # of the string into one (['0\n', '1\n'] becomes '0\n1\n')
+        coord = ''.join(lines)
+        # the single string thus obtained is already formatted as it should to
+        # create the .mesh file
+        file.write(coord)
+    
+
 
 #%% PROVA
 
 mesh_file = 'prova.mesh'
 
+raw_mesh_file = 'prova_raw_mesh.txt'
+
 mesh = read_mesh(mesh_file)
+
+convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh', 'meter')
