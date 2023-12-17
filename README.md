@@ -26,3 +26,4 @@ COORDINATES
 
 - `TST`: concerns tests
 - `DOC`: concerns documentation
+- `RFT`: refactoring

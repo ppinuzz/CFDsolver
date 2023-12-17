@@ -9,7 +9,7 @@ cd "${0%/*}" || exit 1
 rm converted_mesh_test.mesh
 rm converted_mesh.mesh
 
-# More in detail:
+# More in detail (https://stackoverflow.com/questions/6393551/):
 # $0	0-th argument (i.e. the path that called the script)
 # %	is a pattern matching operator: VAR%PATTERN removes from VAR the SHORTEST occurrent of PATTERN
 #	therefore %/* matches the LAST occurrence of '/' and removes anything ('*') after it
