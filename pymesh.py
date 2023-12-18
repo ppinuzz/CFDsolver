@@ -105,4 +105,4 @@ raw_mesh_file = 'prova_raw_mesh.txt'
 
 mesh = read_mesh(mesh_file)
 
-convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh', 'meter')
+convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh')

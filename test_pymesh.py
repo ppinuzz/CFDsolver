@@ -21,7 +21,7 @@ def test_raw_mesh_conversion():
     
     raw_mesh_file = 'prova_raw_mesh.txt'
     
-    pmsh.convert_raw_mesh(raw_mesh_file, 'converted_mesh_test.mesh', 'meter')
+    pmsh.convert_raw_mesh(raw_mesh_file, 'converted_mesh_test.mesh')
     mesh_converted = pmsh.read_mesh('converted_mesh_test.mesh')
     
     mesh_exact = np.array([0. , 0.1, 0.2, 0.3, 0.4])
