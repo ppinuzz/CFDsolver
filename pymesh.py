@@ -34,14 +34,14 @@ def read_mesh(mesh_file):
         #   VALUE
         # when you find a match for a keyword, this means that the NEXT line(s)
         # contain the numerical value.
-        if line == 'UNIT':
+        #if line == 'UNIT':
             # read content of the NEXT line (i.e. the one below the keyword)
-            unit = lines[i+1].strip()
+            #unit = lines[i+1].strip()
             # and skip the next line by moving the counter 
             # (since you've already read the next line, move the "line pointer"
             # to the next line)
-            i = i + 1
-        elif line == 'COORDINATES':
+            #i = i + 1
+        if line == 'COORDINATES':
             # all the lines below are numbers
             mesh_str = lines[i+1:]
             # stop the loop, since the COORDINATES keyword should be the last 
@@ -65,7 +65,7 @@ def read_mesh(mesh_file):
 
 
 
-def convert_raw_mesh(raw_mesh_file, mesh_file, unit):
+def convert_raw_mesh(raw_mesh_file, mesh_file):
     """
     Convert raw coordinates into mesh format
 
@@ -75,8 +75,6 @@ def convert_raw_mesh(raw_mesh_file, mesh_file, unit):
         Name of the file containing raw coordinates
     mesh_file : string
         Name of the converted mesh file
-    unit : string
-        Unit of measure (e.g. 'meter')
 
     Returns
     -------
@@ -89,8 +87,6 @@ def convert_raw_mesh(raw_mesh_file, mesh_file, unit):
         lines = file.readlines()
     
     with open(mesh_file, 'w') as file:
-        file.write('UNIT\n')
-        file.write(unit + '\n\n')
         file.write('COORDINATES\n')
         # since newlines are still there, simply concatenate all the elements
         # of the string into one (['0\n', '1\n'] becomes '0\n1\n')
