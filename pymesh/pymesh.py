@@ -203,15 +203,16 @@ def convert_raw_mesh(raw_mesh_file, mesh_file):
 
 #%% PROVA
 
-#mesh_file = 'prova.mesh'
-
-#raw_mesh_file = 'prova_raw_mesh.txt'
-
-#mesh = read_mesh(mesh_file)
-
-#convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh', 'meter')
-
-input_file = 'prova_FD.input'
-
-mesher(input_file, 'mesh_FD.mesh', 'FD')
+if __name__ == "__main__":
+    #mesh_file = 'prova.mesh'
+    
+    #raw_mesh_file = 'prova_raw_mesh.txt'
+    
+    #mesh = read_mesh(mesh_file)
+    
+    #convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh', 'meter')
+    
+    input_file = 'prova_xFD.input'
+    
+    mesher(input_file, 'mesh_FD.mesh', 'FD')
 
