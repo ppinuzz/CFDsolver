@@ -85,7 +85,7 @@ def print_mesh(mesh, mesh_file):
     
     with open(mesh_file, 'w') as file:
         file.write('COORDINATES\n')
-        np.savetxt(mesh_file, mesh, newline='\n')
+        np.savetxt(file, mesh, newline='\n')
 
 
 def mesher(input_file, mesh_file, discr_method):
@@ -212,7 +212,7 @@ if __name__ == "__main__":
     
     #convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh', 'meter')
     
-    input_file = 'prova_xFD.input'
+    input_file = '../tests/test_FV_input.input'
     
-    mesher(input_file, 'mesh_FD.mesh', 'FD')
+    mesher(input_file, 'mesh_FD.mesh', 'FV')
 
