@@ -93,3 +93,16 @@ def test_1D_FV_mesh():
     success = np.array_equal(mesh_created, mesh_exact)
     
     assert success
+
+
+def test_read_geom():
+    """Test: read geometry from .input file"""
+    
+    input_file = 'tests/test_FV_input.input'
+    geometry = pymesh.read_input_geom(input_file)
+    
+    correct_geom = {'x0': 0, 'xL': 4, 'N': 4, 'spacing': 'uniform'}
+    
+    success = correct_geom == geometry
+    
+    assert success
