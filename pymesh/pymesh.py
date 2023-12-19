@@ -88,28 +88,21 @@ def print_mesh(mesh, mesh_file):
         np.savetxt(file, mesh, newline='\n')
 
 
-def mesher(input_file, mesh_file, discr_method):
+def read_input_geom(input_file):
     """
-    Create a 1D mesh and save it to file
+    Read geometry from input file
 
     Parameters
     ----------
     input_file : string
         Name of the input file required to generate the mesh
-    mesh_file : string
-        Mesh filename
-    discr_method : string
-        Type of discretisation used:
-            'FD' : finite differences
-            'FV': finite volumes
 
     Returns
     -------
-    None.
+    geometry : dictionary
+        Parameters describing the geometry contained in the input file
 
     """
-    
-    import numpy as np
     
     # GET FILE CONTENT
     with open(input_file, 'r') as file:
@@ -148,6 +141,44 @@ def mesher(input_file, mesh_file, discr_method):
         
         # move "line pointer" to the next line
         i = i + 1
+    
+    geometry = {'x0': x0,
+                'xL': xL,
+                'N': N,
+                'spacing': spacing}
+    
+    return geometry
+    
+
+def mesher(input_file, mesh_file, discr_method):
+    """
+    Create a 1D mesh and save it to file
+
+    Parameters
+    ----------
+    input_file : string
+        Name of the input file required to generate the mesh
+    mesh_file : string
+        Mesh filename
+    discr_method : string
+        Type of discretisation used:
+            'FD' : finite differences
+            'FV': finite volumes
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    import numpy as np
+    
+    geometry = read_input_geom(input_file)
+    x0 = geometry['x0']
+    xL = geometry['xL']
+    N = geometry['N']
+    spacing = geometry['spacing']
+    
     
     # CREATE MESH
     if discr_method == 'FD':
