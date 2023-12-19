@@ -47,10 +47,16 @@ def test_print_mesh():
     mesh = np.array([0, 0.1, 0.2, 0.3])
     mesh_file = 'test_print_mesh.mesh'
     pymesh.print_mesh(mesh, mesh_file)
+    with open(mesh_file, 'r') as file:
+        mesh_read = file.readlines()
     
-    mesh_read = pymesh.read_mesh(mesh_file)
+    mesh_exact = ['COORDINATES\n',
+     '0.000000000000000000e+00\n',
+     '1.000000000000000056e-01\n',
+     '2.000000000000000111e-01\n',
+     '2.999999999999999889e-01\n']
     
-    success = np.array_equal(mesh, mesh_read)
+    success = mesh_exact == mesh_read
     
     assert success
 
