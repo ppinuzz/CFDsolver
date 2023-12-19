@@ -5,6 +5,22 @@ Features:
 - CLI-based, but with GUI when defining the simulation
 - controlled entirely (under the hood) with plain text file
 
+## Code structure ##
+
+```mermaid
+flowchart TD
+    start([start]) --> geomInput[\*.input\] 
+    start -.-> rawInput[\raw_input.txt\]
+    rawInput -.-> mesher
+    geomInput --> mesher
+    subgraph mesher ["mesher()"]
+        direction TB
+        readInputGeom["read_input_geom()"] --> printMesh["print_mesh()"]
+    end
+    mesher --> meshFile[\*.mesh\]
+    meshFile --> readMesh["read_mesh()"]
+```
+
 ## Notes ##
 
 ### Mesh ###
