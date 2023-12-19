@@ -12,6 +12,9 @@ rm test_converted_mesh.mesh
 rm test_1D_FD_mesh.mesh
 rm test_1D_FV_mesh.mesh
 
+# FILES CREATED DURING SAMPLE RUN
+rm sample.mesh
+
 # More in detail (https://stackoverflow.com/questions/6393551/):
 # $0	0-th argument (i.e. the path that called the script)
 # %	is a pattern matching operator: VAR%PATTERN removes from VAR the SHORTEST occurrent of PATTERN

@@ -235,15 +235,24 @@ def convert_raw_mesh(raw_mesh_file, mesh_file):
 #%% PROVA
 
 if __name__ == "__main__":
-    #mesh_file = 'prova.mesh'
+    import matplotlib.pyplot as plt
+    import numpy as np
     
-    #raw_mesh_file = 'prova_raw_mesh.txt'
-    
-    #mesh = read_mesh(mesh_file)
-    
-    #convert_raw_mesh(raw_mesh_file, 'converted_mesh.mesh', 'meter')
-    
-    input_file = '../tests/test_FV_input.input'
-    
-    mesher(input_file, 'mesh_FD.mesh', 'FV')
+    sample_folder = '../samplerun/'
+    geo_file = sample_folder + '/geometry.input'
+    mesh_file = '../sample.mesh'
+    discretisation = 'FD'
+
+    mesher(geo_file, mesh_file, discretisation)
+
+    mesh = read_mesh(mesh_file)
+
+
+    # ------------ VISUALISATION ------------
+
+    x_plot = np.zeros(len(mesh))
+
+    plt.figure()
+    plt.plot(mesh, x_plot, 'o')
+    plt.show()
 
