@@ -1,3 +1,6 @@
+import numpy as np
+import os
+
 def read_mesh(mesh_file):
     """
     Read 1D mesh from plain text file and import it
@@ -13,8 +16,6 @@ def read_mesh(mesh_file):
         1D mesh
 
     """
-    
-    import numpy as np
     
     # GET FILE CONTENT
     # read all lines at once and close the file 
@@ -81,8 +82,7 @@ def print_mesh(mesh, mesh_file):
 
     """
     
-    import numpy as np
-    
+    print('Saving mesh to \t\t\t' + os.path.abspath(mesh_file))
     with open(mesh_file, 'w') as file:
         file.write('COORDINATES\n')
         np.savetxt(file, mesh, newline='\n')
@@ -103,6 +103,8 @@ def read_input_geom(input_file):
         Parameters describing the geometry contained in the input file
 
     """
+
+    print('Reading geometry from \t' + os.path.abspath(input_file))
     
     # GET FILE CONTENT
     with open(input_file, 'r') as file:
@@ -171,8 +173,6 @@ def mesher(input_file, mesh_file, discr_method):
 
     """
     
-    import numpy as np
-    
     geometry = read_input_geom(input_file)
     x0 = geometry['x0']
     xL = geometry['xL']
@@ -236,7 +236,6 @@ def convert_raw_mesh(raw_mesh_file, mesh_file):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    import numpy as np
     
     sample_folder = '../samplerun/'
     geo_file = sample_folder + '/geometry.input'
