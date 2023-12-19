@@ -1,9 +1,10 @@
 # CFD solver #
 The idea is to create a CFD solver from scratch, similar to OpenFOAM
 
-Features:
-- CLI-based, but with GUI when defining the simulation
+### Features (ideally) ###
 - controlled entirely (under the hood) with plain text file
+- CLI-based, but with GUI when defining the simulation (similar to FLUENT GUI when choosing the solution schemes: drop-down menus)
+
 
 ## Code structure ##
 
@@ -21,17 +22,32 @@ flowchart TD
     meshFile --> readMesh["read_mesh()"]
 ```
 
-## Notes ##
+## I/O files ##
+
+### Gometry input ###
+- no check is provided on the units (like ABAQUS and differently from CFX-FLUENT)
+
+#### .input file format ###
+```
+X0
+0
+
+XL
+5
+
+N
+12
+
+SPACING
+uniform
+```
+
 
 ### Mesh ###
 - the LAST keyword-value(s) entry in the `.mesh` file must be `COORDINATES` (the code assumes that from `COORDINATES` onward there are only numbers and nothing more)
 
-
-#### Example of mesh file ####
+#### .mesh file format ####
 ```
-UNIT
-meter
-
 COORDINATES
 0
 0.1
@@ -43,3 +59,4 @@ COORDINATES
 - `TST`: concerns tests
 - `DOC`: concerns documentation
 - `RFT`: refactoring
+- `BUG`: bugfix
