@@ -10,7 +10,7 @@ pytest file_to_test.py
 """
 
 import numpy as np
-from pymesh import pymesh
+from pycfd import pymesh
 
 def test_read_mesh_1D():
     """Test: read 1D .mesh file"""
