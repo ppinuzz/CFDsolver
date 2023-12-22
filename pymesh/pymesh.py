@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import sys
 
 def read_mesh(mesh_file):
     """
@@ -22,6 +23,23 @@ def read_mesh(mesh_file):
     # (avoid corrupting mesh files)
     with open(mesh_file, 'r') as file:
         lines = file.readlines()
+    
+    
+    # CHECK FOR EMPTY FILES
+    # weirdly enough, [] == False and is the pythonic way to check if it's empty
+    # (if 'lines' is empty, then 'not lines' == 'not []' == 'not False' = True)
+    # https://stackoverflow.com/questions/53513/
+    if not lines:
+        sys.exit("Empty input file. Execution terminated unexpectedly.")
+    
+    # CHECK FOR WHITESPACE-ONLY FILES
+    # first glue together the entire file content to have a single string
+    # (i.e. join without any separator, thus the '')
+    all_lines = ''.join(lines)
+    # then check if the obtaines string contains only whitespaces
+    # https://stackoverflow.com/questions/2405292/
+    if all_lines.isspace():
+        sys.exit("Empty input file. Execution terminated unexpectedly.")
     
     
     # PARSE FILE CONTENT
