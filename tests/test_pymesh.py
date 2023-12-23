@@ -106,3 +106,17 @@ def test_read_geom():
     success = correct_geom == geometry
     
     assert success
+
+
+if __name__ == '__main__':
+    # input
+    test_read_mesh_1D()
+    test_read_geom()
+    # output
+    test_print_mesh()
+    # format conversion
+    test_raw_mesh_conversion()
+    # mesh creation
+    test_1D_FD_mesh()
+    test_1D_FV_mesh()
+    
