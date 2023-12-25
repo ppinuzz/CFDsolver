@@ -14,7 +14,8 @@ from pycfd import pymesh
 
 # parent directory used for data files
 parent_dir = 'tests/data/'
-
+# directory used for junk data created by tests
+junk_dir = 'tests/junk/'
 
 def test_read_mesh_1D():
     """Test: read 1D .mesh file"""
@@ -33,7 +34,7 @@ def test_raw_mesh_conversion():
     """Test: convert raw mesh coordinates to .mesh input file"""
     
     raw_mesh_file = parent_dir + 'test_raw_mesh.txt'
-    converted_mesh_file = 'test_converted_mesh.mesh'
+    converted_mesh_file = junk_dir + 'test_converted_mesh.mesh'
     
     pymesh.convert_raw_mesh(raw_mesh_file, converted_mesh_file)
     mesh_converted = pymesh.read_mesh(converted_mesh_file)
@@ -49,7 +50,7 @@ def test_print_mesh():
     """Test: print mesh to .mesh file"""
     
     mesh = np.array([0, 0.1, 0.2, 0.3])
-    mesh_file = 'test_print_mesh.mesh'
+    mesh_file = junk_dir + 'test_print_mesh.mesh'
     pymesh.print_mesh(mesh, mesh_file)
     with open(mesh_file, 'r') as file:
         mesh_read = file.readlines()
@@ -72,7 +73,7 @@ def test_1D_FD_mesh():
     mesh_exact = np.array([0, 0.25, 0.5, 0.75, 1])
     
     input_file = parent_dir + 'test_FD_input.input'
-    mesh_file = 'test_1D_FD_mesh.mesh'
+    mesh_file = junk_dir + 'test_1D_FD_mesh.mesh'
     discr_method = 'FD'
     pymesh.mesher(input_file, mesh_file, discr_method)
     mesh_created = pymesh.read_mesh(mesh_file)
@@ -89,7 +90,7 @@ def test_1D_FV_mesh():
     mesh_exact = np.array([0.5, 1.5, 2.5, 3.5])
     
     input_file = parent_dir + 'test_FV_input.input'
-    mesh_file = 'test_1D_FV_mesh.mesh'
+    mesh_file = junk_dir + 'test_1D_FV_mesh.mesh'
     discr_method = 'FV'
     pymesh.mesher(input_file, mesh_file, discr_method)
     mesh_created = pymesh.read_mesh(mesh_file)
