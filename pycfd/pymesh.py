@@ -227,6 +227,9 @@ def convert_raw_mesh(raw_mesh_file, mesh_file):
         # read without removing newlines \n
         lines = file.readlines()
     
+    # check that the files is not empty and does not contain only whitespaces
+    check_empty_input(lines, "ERROR: Empty mesh file")
+    
     # CONVERSION
     with open(mesh_file, 'w') as file:
         file.write('COORDINATES\n')
