@@ -1,22 +1,33 @@
 #!/bin/python3
 
 import argparse
-from pycfd import pymesh
+#from pycfd import pymesh
 
-# create parser
+# CREATE PARSER
 mesh_parser = argparse.ArgumentParser(
             prog="pymesh",
-            description="Create 1D finite difference or finite volume meshes")
+            description="Create 1D finite difference or finite volume meshes",
+            # force the user to enter the EXACT flags, not abbreviated versions
+            allow_abbrev=False)
 
-# add arguments (positional and optional)
-mesh_parser.add_argument("geo_file")
-#mesh_parser.add_argument("-g", "--geometry", action=)
+# ADD ARGUMENTS (positional and optional)
+# required=True     forces them to be mandatory even it the "--syntax" is the 
+#                   one used for optional arguments
+#mesh_parser.add_argument("-g", "--geo-file", action="store", required=True)
+#mesh_parser.add_argument("-m", "--mesh-file", action="store", required=True)
+# (by default, input values are STRINGS!)
+#mesh_parser.add_argument("-d", "--discretisation", action="store", type=int, required=True)
+mesh_parser.add_argument("geo_file",)
 mesh_parser.add_argument("mesh_file")
-#mesh_parser.add_argument("-m", "--mesh", action=)
-mesh_parser.add_argument("discretisation")
+# (by default, input values are STRINGS!)
+mesh_parser.add_argument("discretisation", type=int)
+# version number
+mesh_parser.add_argument("-v", "--version", 
+                        action="version", 
+                        version="%(prog)s 0.0.0")
 
-# parse the arguments passed to the script
+# PARSE THE ARGUMENTS passed to the script
 args = mesh_parser.parse_args()
 
-# and use them as you please
-pymesh.mesher(args.geo_file, args.mesh_file, args.discretisation)
+# USE ARGUMENTS
+#pymesh.mesher(args.geo_file, args.mesh_file, args.discretisation)
