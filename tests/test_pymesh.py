@@ -132,3 +132,23 @@ def test_read_empty_geom():
     # https://stackoverflow.com/a/56569533/17220538
     with pytest.raises(EOFError, match="ERROR: Empty geometry input file"):
         pymesh.read_input_geom(input_file)
+
+
+def test_read_whitespace_mesh():
+    """Test: read mesh file with whitespaces only inside it"""
+    
+    input_file = parent_dir + 'test_whitespace.mesh'
+    
+    # https://stackoverflow.com/a/56569533/17220538
+    with pytest.raises(EOFError, match="ERROR: Empty mesh file"):
+        pymesh.read_mesh(input_file)
+
+
+def test_read_whitespace_geom():
+    """Test: read input geometry file with whitespaces only inside it"""
+    
+    input_file = parent_dir + 'test_whitespace.input'
+    
+    # https://stackoverflow.com/a/56569533/17220538
+    with pytest.raises(EOFError, match="ERROR: Empty geometry input file"):
+        pymesh.read_input_geom(input_file)
