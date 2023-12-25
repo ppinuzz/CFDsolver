@@ -10,6 +10,7 @@ pytest file_to_test.py
 """
 
 import numpy as np
+import pytest
 from pycfd import pymesh
 
 # parent directory used for data files
@@ -111,3 +112,13 @@ def test_read_geom():
     success = correct_geom == geometry
     
     assert success
+
+
+def test_read_empty_mesh():
+    """Test: read empty mesh file"""
+    
+    input_file = parent_dir + 'test_empty.mesh'
+    
+    # https://stackoverflow.com/a/56569533/17220538
+    with pytest.raises(EOFError, match="ERROR: Empty mesh file"):
+        pymesh.read_mesh(input_file)

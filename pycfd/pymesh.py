@@ -30,7 +30,7 @@ def read_mesh(mesh_file):
     # (if 'lines' is empty, then 'not lines' == 'not []' == 'not False' = True)
     # https://stackoverflow.com/questions/53513/
     if not lines:
-        sys.exit("Empty input file. Execution terminated unexpectedly.")
+        raise EOFError("ERROR: Empty mesh file")
     
     # CHECK FOR WHITESPACE-ONLY FILES
     # first glue together the entire file content to have a single string
@@ -39,7 +39,7 @@ def read_mesh(mesh_file):
     # then check if the obtaines string contains only whitespaces
     # https://stackoverflow.com/questions/2405292/
     if all_lines.isspace():
-        sys.exit("Empty input file. Execution terminated unexpectedly.")
+        raise(EOFError, "ERROR: Empty mesh file")
     
     
     # PARSE FILE CONTENT
