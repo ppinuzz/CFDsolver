@@ -273,7 +273,7 @@ if __name__ == "__main__":
     
     sample_folder = '../samplerun/'
     geo_file = sample_folder + '/geometry.input'
-    mesh_file = '../sample.mesh'
+    mesh_file = sample_folder + 'sample.mesh'
     discretisation = 'FD'
 
     mesher(geo_file, mesh_file, discretisation)
