@@ -24,22 +24,8 @@ def read_mesh(mesh_file):
     with open(mesh_file, 'r') as file:
         lines = file.readlines()
     
-    
-    # CHECK FOR EMPTY FILES
-    # weirdly enough, [] == False and is the pythonic way to check if it's empty
-    # (if 'lines' is empty, then 'not lines' == 'not []' == 'not False' = True)
-    # https://stackoverflow.com/questions/53513/
-    if not lines:
-        raise EOFError("ERROR: Empty mesh file")
-    
-    # CHECK FOR WHITESPACE-ONLY FILES
-    # first glue together the entire file content to have a single string
-    # (i.e. join without any separator, thus the '')
-    all_lines = ''.join(lines)
-    # then check if the obtaines string contains only whitespaces
-    # https://stackoverflow.com/questions/2405292/
-    if all_lines.isspace():
-        raise(EOFError, "ERROR: Empty mesh file")
+    # check that the files is not empty and does not contain only whitespaces
+    check_empty_input(lines, "ERROR: Empty mesh file")
     
     
     # PARSE FILE CONTENT
@@ -127,22 +113,9 @@ def read_input_geom(input_file):
     # GET FILE CONTENT
     with open(input_file, 'r') as file:
         lines = file.readlines()
-    
-    # CHECK FOR EMPTY FILES
-    # weirdly enough, [] == False and is the pythonic way to check if it's empty
-    # (if 'lines' is empty, then 'not lines' == 'not []' == 'not False' = True)
-    # https://stackoverflow.com/questions/53513/
-    if not lines:
-        raise EOFError("ERROR: Empty geometry input file")
-    
-    # CHECK FOR WHITESPACE-ONLY FILES
-    # first glue together the entire file content to have a single string
-    # (i.e. join without any separator, thus the '')
-    all_lines = ''.join(lines)
-    # then check if the obtaines string contains only whitespaces
-    # https://stackoverflow.com/questions/2405292/
-    if all_lines.isspace():
-        raise(EOFError, "ERROR: Empty geometry input file")
+
+    # check that the files is not empty and does not contain only whitespaces
+    check_empty_input(lines, "ERROR: Empty geometry input file")
     
     # PARSE FILE CONTENT
     i = 0
@@ -264,6 +237,47 @@ def convert_raw_mesh(raw_mesh_file, mesh_file):
         # create the .mesh file
         file.write(coord)
 
+
+def check_empty_input(lines_from_file, error_message):
+    """
+    Check if the lines read from a file are empty (of contain only whitespaces)
+    and return the EOFError exception if that occurs
+
+    Parameters
+    ----------
+    lines_from_file : list
+        Text lines read from a file (with .readlines() usually)
+    error_message : string
+        Errore message to be associate with the EOFError exception
+
+    Raises
+    ------
+    EOFError
+        In a way, if the file is empty or contains only whitespaces it is true
+        that the file reader has reached EOF without encountering "anything 
+        useful" for the solver/mesher
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    # CHECK FOR EMPTY FILES
+    # weirdly enough, [] == False and is the pythonic way to check if it's empty
+    # (if 'lines' is empty, then 'not lines' == 'not []' == 'not False' = True)
+    # https://stackoverflow.com/a/53522/17220538
+    if not lines_from_file:
+        raise EOFError(error_message)
+    
+    # CHECK FOR WHITESPACE-ONLY FILES
+    # first glue together the entire file content to have a single string
+    # (i.e. join without any separator, thus the '')
+    all_lines = ''.join(lines_from_file)
+    # then check if the obtaines string contains only whitespaces
+    # https://stackoverflow.com/questions/2405292/
+    if all_lines.isspace():
+        raise EOFError(error_message)
 
 
 #%% PROVA
