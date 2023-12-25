@@ -114,41 +114,29 @@ def test_read_geom():
     assert success
 
 
-def test_read_empty_mesh():
-    """Test: read empty mesh file"""
-    
-    input_file = parent_dir + 'test_empty.mesh'
-    
-    # https://stackoverflow.com/a/56569533/17220538
-    with pytest.raises(EOFError, match="ERROR: Empty mesh file"):
-        pymesh.read_mesh(input_file)
-
-
-def test_read_empty_geom():
-    """Test: read empty input geometry file"""
+def test_check_empty_file():
+    """Test: check whether the content of a file is non-existent (empty file)"""
     
     input_file = parent_dir + 'test_empty.input'
+    with open(input_file, 'r') as file:
+        lines_from_file = file.readlines()
+    error_message = "ERROR: Empty file"
     
     # https://stackoverflow.com/a/56569533/17220538
-    with pytest.raises(EOFError, match="ERROR: Empty geometry input file"):
-        pymesh.read_input_geom(input_file)
+    with pytest.raises(EOFError, match=error_message):
+        pymesh.check_empty_input(lines_from_file, error_message)
 
 
-def test_read_whitespace_mesh():
-    """Test: read mesh file with whitespaces only inside it"""
-    
-    input_file = parent_dir + 'test_whitespace.mesh'
-    
-    # https://stackoverflow.com/a/56569533/17220538
-    with pytest.raises(EOFError, match="ERROR: Empty mesh file"):
-        pymesh.read_mesh(input_file)
-
-
-def test_read_whitespace_geom():
-    """Test: read input geometry file with whitespaces only inside it"""
+def test_check_whitespaces_file():
+    """Test: check whether the content of a file is composed of whitespaces only"""
     
     input_file = parent_dir + 'test_whitespace.input'
+    with open(input_file, 'r') as file:
+        lines_from_file = file.readlines()
+    error_message = "ERROR: Only whitespaces in the file"
     
     # https://stackoverflow.com/a/56569533/17220538
-    with pytest.raises(EOFError, match="ERROR: Empty geometry input file"):
-        pymesh.read_input_geom(input_file)
+    with pytest.raises(EOFError, match=error_message):
+        pymesh.check_empty_input(lines_from_file, error_message)
+
+
