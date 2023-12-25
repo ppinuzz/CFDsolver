@@ -6,14 +6,11 @@
 # (and return error code 1 if this doesn't work for any reason)
 cd "${0%/*}" || exit 1
 
-# FILES CREATED DURING UNIT TESTING OF MESHER
-rm test_print_mesh.mesh
-rm test_converted_mesh.mesh
-rm test_1D_FD_mesh.mesh
-rm test_1D_FV_mesh.mesh
+# FILES CREATED DURING UNIT TESTING
+rm -r tests/junk/*
 
 # FILES CREATED DURING SAMPLE RUN
-rm sample.mesh
+#rm sample.mesh
 
 # More in detail (https://stackoverflow.com/questions/6393551/):
 # $0	0-th argument (i.e. the path that called the script)

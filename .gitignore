@@ -2,5 +2,5 @@
 .pyc
 __pycache__
 
-# mesh files created by tests
-converted_mesh_test.mesh
+# files create by sample runs
+samplerun/sample.mesh
