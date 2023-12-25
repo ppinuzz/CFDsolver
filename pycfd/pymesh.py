@@ -128,6 +128,22 @@ def read_input_geom(input_file):
     with open(input_file, 'r') as file:
         lines = file.readlines()
     
+    # CHECK FOR EMPTY FILES
+    # weirdly enough, [] == False and is the pythonic way to check if it's empty
+    # (if 'lines' is empty, then 'not lines' == 'not []' == 'not False' = True)
+    # https://stackoverflow.com/questions/53513/
+    if not lines:
+        raise EOFError("ERROR: Empty geometry input file")
+    
+    # CHECK FOR WHITESPACE-ONLY FILES
+    # first glue together the entire file content to have a single string
+    # (i.e. join without any separator, thus the '')
+    all_lines = ''.join(lines)
+    # then check if the obtaines string contains only whitespaces
+    # https://stackoverflow.com/questions/2405292/
+    if all_lines.isspace():
+        raise(EOFError, "ERROR: Empty geometry input file")
+    
     # PARSE FILE CONTENT
     i = 0
     while i < len(lines):

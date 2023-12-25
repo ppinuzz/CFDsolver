@@ -122,3 +122,13 @@ def test_read_empty_mesh():
     # https://stackoverflow.com/a/56569533/17220538
     with pytest.raises(EOFError, match="ERROR: Empty mesh file"):
         pymesh.read_mesh(input_file)
+
+
+def test_read_empty_geom():
+    """Test: read empty input geometry file"""
+    
+    input_file = parent_dir + 'test_empty.input'
+    
+    # https://stackoverflow.com/a/56569533/17220538
+    with pytest.raises(EOFError, match="ERROR: Empty geometry input file"):
+        pymesh.read_input_geom(input_file)
