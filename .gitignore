@@ -4,3 +4,10 @@ __pycache__
 
 # files create by sample runs
 samplerun/sample.mesh
+
+# VSCode files with project settings
+.vscode/*
+
+# backup files created by Excel
+~$*
+
