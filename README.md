@@ -60,3 +60,14 @@ COORDINATES
 - `DOC`: concerns documentation
 - `RFT`: refactoring
 - `BUG`: bugfix
+
+### Rules for semantic versioning ###
+
+Every release is numbered as `MAJOR.MINOR.PATCH`, where:
+
+- `MAJOR` is incremented when an **incomptabile** API change is made
+- `MINOR` is incremented when a functionality is added in a **backward compatible**
+- `PATCH` is increment when a **backward compatible** bugfix is implemented
+- whenever a number is changed, all its children are reset to 0
+- if a feature becomes deprecated, issue a new `MINOR` version where the user is notified of the deprecation
+- versions `0.x.y` are for initial development (i.e. unstable API)
