@@ -284,27 +284,3 @@ def check_empty_input(lines_from_file, error_message):
     if all_lines.isspace():
         raise EOFError(error_message)
 
-
-#%% PROVA
-
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    
-    sample_folder = '../samplerun/'
-    geo_file = sample_folder + '/geometry.input'
-    mesh_file = sample_folder + 'sample.mesh'
-    discretisation = 'FD'
-
-    mesher(geo_file, mesh_file, discretisation)
-
-    mesh = read_mesh(mesh_file)
-
-
-    # ------------ VISUALISATION ------------
-
-    x_plot = np.zeros(len(mesh))
-
-    plt.figure()
-    plt.plot(mesh, x_plot, 'o')
-    plt.show()
-
