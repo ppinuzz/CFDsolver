@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import pycfd 
+import context
+import pycfd
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -11,8 +12,8 @@ geo_file = sample_folder + '/geometry.input'
 mesh_file = sample_folder + 'sample.mesh'
 discretisation = 'FV'
 
-pycfd.mesher(geo_file, mesh_file, discretisation)
-mesh = pycfd.read_mesh(mesh_file)
+pycfd.pymesh.mesher(geo_file, mesh_file, discretisation)
+mesh = pycfd.pymesh.read_mesh(mesh_file)
 
 
 #%% VISUALISATION
