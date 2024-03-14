@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 
+# add the path of the module to sys.path, otherwise Python won't find it...
+# (https://docs.python-guide.org/writing/structure/#test-suite)
 import context
-import pycfd
+# submodules are NOT imported by default, you have to import them explicitly
+# (https://stackoverflow.com/a/8899345/17220538)
+import pycfd.pymesh as pmsh
 import matplotlib.pyplot as plt
 import numpy as np
+
 
 #%% PROVA
 
@@ -12,13 +17,15 @@ geo_file = sample_folder + '/geometry.input'
 mesh_file = sample_folder + 'sample.mesh'
 discretisation = 'FV'
 
-pycfd.pymesh.mesher(geo_file, mesh_file, discretisation)
-mesh = pycfd.pymesh.read_mesh(mesh_file)
+pmsh.mesher(geo_file, mesh_file, discretisation)
+mesh = pmsh.read_mesh(mesh_file)
 
 
 #%% VISUALISATION
 
 x_plot = np.zeros(len(mesh))
 plt.figure()
-plt.plot(mesh, x_plot, 'o')
+plt.plot([0, 4], [0, 0], 'r')     # physical domain
+plt.plot(mesh, x_plot, 'o')         # centroids
+plt.autoscale(enable=True, axis='x', tight=True)    # MATLAB's xlim tight
 plt.show()
