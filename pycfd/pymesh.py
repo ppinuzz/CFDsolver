@@ -161,7 +161,7 @@ def read_input_geom(input_file):
     return geometry
     
 
-def mesher(input_file, mesh_file, discr_method):
+def mesher(input_file, mesh_file, discr_method='cellcenter'):
     """
     Create a 1D mesh and save it to file
 
@@ -190,9 +190,7 @@ def mesher(input_file, mesh_file, discr_method):
     
     
     # CREATE MESH
-    if discr_method == 'FD':
-        mesh = np.linspace(x0, xL, N)
-    elif discr_method == 'FV':
+    if discr_method == 'cellcenter':
         # mesh spacing = width of a finite volume (if uniform spacing is used)
         dx = (xL - x0) / N
         # x0 is the boundary of the physical domain and the boundary of the 

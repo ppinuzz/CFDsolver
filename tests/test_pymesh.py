@@ -69,24 +69,7 @@ def test_print_mesh():
     assert success
 
 
-def test_1D_FD_mesh():
-    """Test: create 1D finite difference mesh"""
-    
-    # nodal coordinates
-    mesh_exact = np.array([0, 0.25, 0.5, 0.75, 1])
-    
-    input_file = parent_dir + 'test_FD_input.input'
-    mesh_file = junk_dir + 'test_1D_FD_mesh.mesh'
-    discr_method = 'FD'
-    pymesh.mesher(input_file, mesh_file, discr_method)
-    mesh_created = pymesh.read_mesh(mesh_file)
-    
-    success = np.array_equal(mesh_created, mesh_exact)
-    
-    assert success
-
-
-def test_1D_FV_mesh():
+def test_1D_cell_center_mesh():
     """Test: create 1D finite volume mesh"""
     
     # centroid coordinates
@@ -94,7 +77,7 @@ def test_1D_FV_mesh():
     
     input_file = parent_dir + 'test_FV_input.input'
     mesh_file = junk_dir + 'test_1D_FV_mesh.mesh'
-    discr_method = 'FV'
+    discr_method = 'cellcenter'
     pymesh.mesher(input_file, mesh_file, discr_method)
     mesh_created = pymesh.read_mesh(mesh_file)
     
