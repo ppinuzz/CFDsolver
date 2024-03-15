@@ -173,8 +173,9 @@ def mesher(input_file, mesh_file, discr_method='cellcenter'):
         Mesh filename
     discr_method : string
         Type of discretisation used:
-            'FD' : finite differences
-            'FV': finite volumes
+            
+            - ``'cellcenter'`` : cell-center
+            - ``'cellvertex'``: cell-vertex (NOT implemented) 
 
     Returns
     -------
@@ -243,19 +244,19 @@ def convert_raw_mesh(raw_mesh_file, mesh_file):
 
 def check_empty_input(lines_from_file, error_message):
     """
-    Check if the lines read from a file are empty (of contain only whitespaces)
-    and return the EOFError exception if that occurs
+    Check if the lines read from a file are empty (or contain only whitespaces)
+    and return the ``EOFError`` exception if that occurs
 
     Parameters
     ----------
     lines_from_file : list
-        Text lines read from a file (with .readlines() usually)
+        Text lines read from a file (with ``.readlines()`` usually)
     error_message : string
-        Errore message to be associate with the EOFError exception
+        Errore message to be associate with the ``EOFError`` exception
 
     Raises
     ------
-    EOFError
+    ``EOFError``
         In a way, if the file is empty or contains only whitespaces it is true
         that the file reader has reached EOF without encountering "anything 
         useful" for the solver/mesher

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycfd package &mdash; My 1D CFD solver 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pycfd" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            My 1D CFD solver
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pycfd</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pycfd package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pycfd.pymesh">pycfd.pymesh module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pycfd">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">My 1D CFD solver</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pycfd</a></li>
+      <li class="breadcrumb-item active">pycfd package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pycfd.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pycfd-package">
+<h1>pycfd package<a class="headerlink" href="#pycfd-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-pycfd.pymesh">
+<span id="pycfd-pymesh-module"></span><h2>pycfd.pymesh module<a class="headerlink" href="#module-pycfd.pymesh" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.check_empty_input">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">check_empty_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines_from_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#check_empty_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.check_empty_input" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the lines read from a file are empty (or contain only whitespaces)
+and return the <code class="docutils literal notranslate"><span class="pre">EOFError</span></code> exception if that occurs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lines_from_file</strong> (<em>list</em>) – Text lines read from a file (with <code class="docutils literal notranslate"><span class="pre">.readlines()</span></code> usually)</p></li>
+<li><p><strong>error_message</strong> (<em>string</em>) – Errore message to be associate with the <code class="docutils literal notranslate"><span class="pre">EOFError</span></code> exception</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>EOFError</strong> – In a way, if the file is empty or contains only whitespaces it is true
+    that the file reader has reached EOF without encountering “anything
+    useful” for the solver/mesher</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.convert_raw_mesh">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">convert_raw_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#convert_raw_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.convert_raw_mesh" title="Permalink to this definition"></a></dt>
+<dd><p>Convert raw coordinates into mesh format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_mesh_file</strong> (<em>string</em>) – Name of the file containing raw coordinates</p></li>
+<li><p><strong>mesh_file</strong> (<em>string</em>) – Name of the converted mesh file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.mesher">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">mesher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discr_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cellcenter'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#mesher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.mesher" title="Permalink to this definition"></a></dt>
+<dd><p>Create a 1D mesh and save it to file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> (<em>string</em>) – Name of the input file required to generate the mesh</p></li>
+<li><p><strong>mesh_file</strong> (<em>string</em>) – Mesh filename</p></li>
+<li><p><strong>discr_method</strong> (<em>string</em>) – <p>Type of discretisation used:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'cellcenter'</span></code> : cell-center</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'cellvertex'</span></code>: cell-vertex (NOT implemented)</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.print_mesh">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">print_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#print_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.print_mesh" title="Permalink to this definition"></a></dt>
+<dd><p>Print the mesh saving it in a plain text file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> (<em>array</em>) – Mesh coordinates</p></li>
+<li><p><strong>mesh_file</strong> (<em>string</em>) – Name of the file where to save the mesh</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.read_input_geom">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">read_input_geom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#read_input_geom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.read_input_geom" title="Permalink to this definition"></a></dt>
+<dd><p>Read geometry from input file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_file</strong> (<em>string</em>) – Name of the input file required to generate the mesh</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>geometry</strong> – Parameters describing the geometry contained in the input file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.read_mesh">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">read_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#read_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.read_mesh" title="Permalink to this definition"></a></dt>
+<dd><p>Read 1D mesh from plain text file and import it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mesh_file</strong> (<em>string</em>) – Name of the mesh file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mesh</strong> – 1D mesh</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pycfd">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pycfd" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pycfd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Andrea Pinardi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

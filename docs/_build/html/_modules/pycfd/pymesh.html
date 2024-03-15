@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycfd.pymesh &mdash; My 1D CFD solver 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            My 1D CFD solver
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pycfd</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">My 1D CFD solver</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pycfd.pymesh</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycfd.pymesh</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<div class="viewcode-block" id="read_mesh"><a class="viewcode-back" href="../../pycfd.html#pycfd.pymesh.read_mesh">[docs]</a><span class="k">def</span> <span class="nf">read_mesh</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read 1D mesh from plain text file and import it</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mesh_file : string</span>
+<span class="sd">        Name of the mesh file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mesh : array</span>
+<span class="sd">        1D mesh</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># GET FILE CONTENT</span>
+    <span class="c1"># read all lines at once and close the file </span>
+    <span class="c1"># (avoid corrupting mesh files)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    
+    <span class="c1"># check that the files is not empty and does not contain only whitespaces</span>
+    <span class="n">check_empty_input</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;ERROR: Empty mesh file&quot;</span><span class="p">)</span>
+    
+    
+    <span class="c1"># PARSE FILE CONTENT</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+        <span class="c1"># remove eventual whitespaces (e.g. the trailing &#39;\n&#39; always present)</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        
+        <span class="c1"># format of the file:</span>
+        <span class="c1">#   KEYWORD</span>
+        <span class="c1">#   VALUE</span>
+        <span class="c1"># when you find a match for a keyword, this means that the NEXT line(s)</span>
+        <span class="c1"># contain the numerical value.</span>
+        <span class="c1">#if line == &#39;UNIT&#39;:</span>
+            <span class="c1"># read content of the NEXT line (i.e. the one below the keyword)</span>
+            <span class="c1">#unit = lines[i+1].strip()</span>
+            <span class="c1"># and skip the next line by moving the counter </span>
+            <span class="c1"># (since you&#39;ve already read the next line, move the &quot;line pointer&quot;</span>
+            <span class="c1"># to the next line)</span>
+            <span class="c1">#i = i + 1</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;COORDINATES&#39;</span><span class="p">:</span>
+            <span class="c1"># all the lines below are numbers</span>
+            <span class="n">mesh_str</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="c1"># stop the loop, since the COORDINATES keyword should be the last </span>
+            <span class="c1"># keyword in the file</span>
+            <span class="k">break</span>
+        
+        <span class="c1"># move &quot;line pointer&quot; to the next line</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+    
+    <span class="c1"># CONVERT COORDINATES INTO FLOATS</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">mesh_str</span><span class="p">:</span>
+        <span class="c1"># remove whitespace</span>
+        <span class="n">x_i</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">x_i</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_i</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">mesh</span></div>
+
+
+<div class="viewcode-block" id="print_mesh"><a class="viewcode-back" href="../../pycfd.html#pycfd.pymesh.print_mesh">[docs]</a><span class="k">def</span> <span class="nf">print_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">mesh_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print the mesh saving it in a plain text file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mesh : array</span>
+<span class="sd">        Mesh coordinates</span>
+<span class="sd">    mesh_file : string</span>
+<span class="sd">        Name of the file where to save the mesh</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving mesh to </span><span class="se">\t\t\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;COORDINATES</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_input_geom"><a class="viewcode-back" href="../../pycfd.html#pycfd.pymesh.read_input_geom">[docs]</a><span class="k">def</span> <span class="nf">read_input_geom</span><span class="p">(</span><span class="n">input_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read geometry from input file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_file : string</span>
+<span class="sd">        Name of the input file required to generate the mesh</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    geometry : dictionary</span>
+<span class="sd">        Parameters describing the geometry contained in the input file</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading geometry from </span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">input_file</span><span class="p">))</span>
+    
+    <span class="c1"># GET FILE CONTENT</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="c1"># check that the files is not empty and does not contain only whitespaces</span>
+    <span class="n">check_empty_input</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;ERROR: Empty geometry input file&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># PARSE FILE CONTENT</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+        <span class="c1"># remove eventual whitespaces (e.g. the trailing &#39;\n&#39; always present)</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        
+        <span class="c1"># format of the file:</span>
+        <span class="c1">#   KEYWORD</span>
+        <span class="c1">#   VALUE</span>
+        <span class="c1"># when you find a match for a keyword, this means that the NEXT line(s)</span>
+        <span class="c1"># contain the numerical value.</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;X0&#39;</span><span class="p">:</span>
+            <span class="c1"># read content of the NEXT line (i.e. the one below the keyword)</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+            <span class="c1"># and skip the next line by moving the counter </span>
+            <span class="c1"># (since you&#39;ve already read the next line, move the &quot;line pointer&quot;</span>
+            <span class="c1"># to the next line)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;XL&#39;</span><span class="p">:</span>
+            <span class="n">xL</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">xL</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xL</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="c1"># the number of points is an INTEGER</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;SPACING&#39;</span><span class="p">:</span>
+            <span class="n">spacing</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        
+        <span class="c1"># move &quot;line pointer&quot; to the next line</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    <span class="n">geometry</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x0&#39;</span><span class="p">:</span> <span class="n">x0</span><span class="p">,</span>
+                <span class="s1">&#39;xL&#39;</span><span class="p">:</span> <span class="n">xL</span><span class="p">,</span>
+                <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span>
+                <span class="s1">&#39;spacing&#39;</span><span class="p">:</span> <span class="n">spacing</span><span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">geometry</span></div>
+    
+
+<div class="viewcode-block" id="mesher"><a class="viewcode-back" href="../../pycfd.html#pycfd.pymesh.mesher">[docs]</a><span class="k">def</span> <span class="nf">mesher</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">mesh_file</span><span class="p">,</span> <span class="n">discr_method</span><span class="o">=</span><span class="s1">&#39;cellcenter&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a 1D mesh and save it to file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_file : string</span>
+<span class="sd">        Name of the input file required to generate the mesh</span>
+<span class="sd">    mesh_file : string</span>
+<span class="sd">        Mesh filename</span>
+<span class="sd">    discr_method : string</span>
+<span class="sd">        Type of discretisation used:</span>
+<span class="sd">            </span>
+<span class="sd">            - ``&#39;cellcenter&#39;`` : cell-center</span>
+<span class="sd">            - ``&#39;cellvertex&#39;``: cell-vertex (NOT implemented) </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">read_input_geom</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">geometry</span><span class="p">[</span><span class="s1">&#39;x0&#39;</span><span class="p">]</span>
+    <span class="n">xL</span> <span class="o">=</span> <span class="n">geometry</span><span class="p">[</span><span class="s1">&#39;xL&#39;</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">geometry</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">]</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="n">geometry</span><span class="p">[</span><span class="s1">&#39;spacing&#39;</span><span class="p">]</span>
+    
+    
+    <span class="c1"># CREATE MESH</span>
+    <span class="k">if</span> <span class="n">discr_method</span> <span class="o">==</span> <span class="s1">&#39;cellcenter&#39;</span><span class="p">:</span>
+        <span class="c1"># mesh spacing = width of a finite volume (if uniform spacing is used)</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">xL</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="c1"># x0 is the boundary of the physical domain and the boundary of the </span>
+        <span class="c1"># first physical FV, but the centroid of the FV is dx/2 from its face</span>
+        <span class="n">xC_0</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">dx</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">xC_L</span> <span class="o">=</span> <span class="n">xL</span> <span class="o">-</span> <span class="n">dx</span><span class="o">/</span><span class="mi">2</span>
+        <span class="c1"># the centroids are equally spaced in the interval [xC_0, xC_L]</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xC_0</span><span class="p">,</span> <span class="n">xC_L</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    
+    
+    <span class="c1"># SAVE MESH TO FILE</span>
+    <span class="n">print_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">mesh_file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_raw_mesh"><a class="viewcode-back" href="../../pycfd.html#pycfd.pymesh.convert_raw_mesh">[docs]</a><span class="k">def</span> <span class="nf">convert_raw_mesh</span><span class="p">(</span><span class="n">raw_mesh_file</span><span class="p">,</span> <span class="n">mesh_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert raw coordinates into mesh format</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_mesh_file : string</span>
+<span class="sd">        Name of the file containing raw coordinates</span>
+<span class="sd">    mesh_file : string</span>
+<span class="sd">        Name of the converted mesh file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># GET FILE CONTENT</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">raw_mesh_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="c1"># read without removing newlines \n</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    
+    <span class="c1"># check that the files is not empty and does not contain only whitespaces</span>
+    <span class="n">check_empty_input</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;ERROR: Empty mesh file&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># CONVERSION</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mesh_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;COORDINATES</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># since newlines are still there, simply concatenate all the elements</span>
+        <span class="c1"># of the string into one ([&#39;0\n&#39;, &#39;1\n&#39;] becomes &#39;0\n1\n&#39;)</span>
+        <span class="n">coord</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="c1"># the single string thus obtained is already formatted as it should to</span>
+        <span class="c1"># create the .mesh file</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_empty_input"><a class="viewcode-back" href="../../pycfd.html#pycfd.pymesh.check_empty_input">[docs]</a><span class="k">def</span> <span class="nf">check_empty_input</span><span class="p">(</span><span class="n">lines_from_file</span><span class="p">,</span> <span class="n">error_message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the lines read from a file are empty (or contain only whitespaces)</span>
+<span class="sd">    and return the ``EOFError`` exception if that occurs</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lines_from_file : list</span>
+<span class="sd">        Text lines read from a file (with ``.readlines()`` usually)</span>
+<span class="sd">    error_message : string</span>
+<span class="sd">        Errore message to be associate with the ``EOFError`` exception</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ``EOFError``</span>
+<span class="sd">        In a way, if the file is empty or contains only whitespaces it is true</span>
+<span class="sd">        that the file reader has reached EOF without encountering &quot;anything </span>
+<span class="sd">        useful&quot; for the solver/mesher</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># CHECK FOR EMPTY FILES</span>
+    <span class="c1"># weirdly enough, [] == False and is the pythonic way to check if it&#39;s empty</span>
+    <span class="c1"># (if &#39;lines&#39; is empty, then &#39;not lines&#39; == &#39;not []&#39; == &#39;not False&#39; = True)</span>
+    <span class="c1"># https://stackoverflow.com/a/53522/17220538</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lines_from_file</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">EOFError</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span>
+    
+    <span class="c1"># CHECK FOR WHITESPACE-ONLY FILES</span>
+    <span class="c1"># first glue together the entire file content to have a single string</span>
+    <span class="c1"># (i.e. join without any separator, thus the &#39;&#39;)</span>
+    <span class="n">all_lines</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines_from_file</span><span class="p">)</span>
+    <span class="c1"># then check if the obtaines string contains only whitespaces</span>
+    <span class="c1"># https://stackoverflow.com/questions/2405292/</span>
+    <span class="k">if</span> <span class="n">all_lines</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">EOFError</span><span class="p">(</span><span class="n">error_message</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Andrea Pinardi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
