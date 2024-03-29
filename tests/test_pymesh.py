@@ -52,7 +52,8 @@ def test_raw_mesh_conversion():
 def test_print_mesh():
     """Test: print mesh to .mesh file"""
     
-    mesh = np.array([0, 0.1, 0.2, 0.3])
+    x_centroids = np.array([0, 0.1, 0.2, 0.3])
+    mesh = {'centroids': x_centroids}
     mesh_file = junk_dir + 'test_print_mesh.mesh'
     pymesh.print_mesh(mesh, mesh_file)
     with open(mesh_file, 'r') as file:
@@ -92,7 +93,7 @@ def test_read_geom():
     input_file = parent_dir + 'test_FV_input.input'
     geometry = pymesh.read_input_geom(input_file)
     
-    correct_geom = {'x0': 0, 'xL': 4, 'N': 4, 'spacing': 'uniform'}
+    correct_geom = {'x0': 0, 'xL': 4, 'N': 4, 'spacing': 'uniform', 'expansion_ratio': None}
     
     success = correct_geom == geometry
     
@@ -125,3 +126,24 @@ def test_check_whitespaces_file():
         pymesh.check_empty_input(lines_from_file, error_message)
 
 
+
+if __name__ == '__main__':
+    # I don't know why, but 
+    #   import .context     works with pytest, not when run as a script
+    #   import context      works when run as a script, not with pytest
+    # Since 'context' is not strictly necessary when running pytest, let's use
+    # it only when the file is run in 'script mode'
+    import context
+    
+    # if you're running the file as a script, the paths must be relative to 
+    # THIS file (I guess?)
+    parent_dir = './data/'     # parent directory used for data files
+    junk_dir = './junk/'       # directory used for junk data created by tests
+    
+    test_read_mesh_1D()
+    test_raw_mesh_conversion()
+    test_print_mesh()
+    test_1D_cell_center_mesh()
+    test_read_geom()
+    test_check_empty_file()
+    test_check_whitespaces_file()

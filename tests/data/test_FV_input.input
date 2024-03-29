@@ -9,3 +9,6 @@ N
 
 SPACING
 uniform
+
+EXPANSION_RATIO
+1.1
