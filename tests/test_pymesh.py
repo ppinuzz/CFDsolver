@@ -52,7 +52,8 @@ def test_raw_mesh_conversion():
 def test_print_mesh():
     """Test: print mesh to .mesh file"""
     
-    mesh = np.array([0, 0.1, 0.2, 0.3])
+    x_centroids = np.array([0, 0.1, 0.2, 0.3])
+    mesh = {'centroids': x_centroids}
     mesh_file = junk_dir + 'test_print_mesh.mesh'
     pymesh.print_mesh(mesh, mesh_file)
     with open(mesh_file, 'r') as file:
@@ -92,7 +93,7 @@ def test_read_geom():
     input_file = parent_dir + 'test_FV_input.input'
     geometry = pymesh.read_input_geom(input_file)
     
-    correct_geom = {'x0': 0, 'xL': 4, 'N': 4, 'spacing': 'uniform'}
+    correct_geom = {'x0': 0, 'xL': 4, 'N': 4, 'spacing': 'uniform', 'expansion_ratio': None}
     
     success = correct_geom == geometry
     
