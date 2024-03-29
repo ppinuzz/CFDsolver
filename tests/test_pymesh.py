@@ -125,3 +125,24 @@ def test_check_whitespaces_file():
         pymesh.check_empty_input(lines_from_file, error_message)
 
 
+
+if __name__ == '__main__':
+    # I don't know why, but 
+    #   import .context     works with pytest, not when run as a script
+    #   import context      works when run as a script, not with pytest
+    # Since 'context' is not strictly necessary when running pytest, let's use
+    # it only when the file is run in 'script mode'
+    import context
+    
+    # if you're running the file as a script, the paths must be relative to 
+    # THIS file (I guess?)
+    parent_dir = './data/'     # parent directory used for data files
+    junk_dir = './junk/'       # directory used for junk data created by tests
+    
+    test_read_mesh_1D()
+    test_raw_mesh_conversion()
+    test_print_mesh()
+    test_1D_cell_center_mesh()
+    test_read_geom()
+    test_check_empty_file()
+    test_check_whitespaces_file()
