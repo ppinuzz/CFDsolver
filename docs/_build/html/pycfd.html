@@ -15,6 +15,7 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -85,6 +86,11 @@
 </section>
 <section id="module-pycfd.pymesh">
 <span id="pycfd-pymesh-module"></span><h2>pycfd.pymesh module<a class="headerlink" href="#module-pycfd.pymesh" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycfd.pymesh.calculate_expansion_ratio">
+<span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">calculate_expansion_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xf_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xf_N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#calculate_expansion_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.calculate_expansion_ratio" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="pycfd.pymesh.check_empty_input">
 <span class="sig-prename descclassname"><span class="pre">pycfd.pymesh.</span></span><span class="sig-name descname"><span class="pre">check_empty_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines_from_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycfd/pymesh.html#check_empty_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycfd.pymesh.check_empty_input" title="Permalink to this definition"></a></dt>
@@ -166,7 +172,14 @@ and return the <code class="docutils literal notranslate"><span class="pre">EOFE
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mesh</strong> (<em>array</em>) – Mesh coordinates</p></li>
+<li><p><strong>mesh</strong> (<em>dictionary</em>) – <p>Mesh coordinates:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'centroids'</span></code>: centroid coordinates <span class="math notranslate nohighlight">\(x_P\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'face_nodes'</span></code>: face centre coordinates <span class="math notranslate nohighlight">\(x_\mathrm{f}\)</span></p></li>
+</ul>
+</div></blockquote>
+</p></li>
 <li><p><strong>mesh_file</strong> (<em>string</em>) – Name of the file where to save the mesh</p></li>
 </ul>
 </dd>
@@ -188,7 +201,25 @@ and return the <code class="docutils literal notranslate"><span class="pre">EOFE
 <dd class="field-odd"><p><strong>input_file</strong> (<em>string</em>) – Name of the input file required to generate the mesh</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>geometry</strong> – Parameters describing the geometry contained in the input file</p>
+<dd class="field-even"><p><p><strong>geometry</strong> –</p>
+<p>Parameters describing the geometry contained in the input file:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'xf_0'</span></code>: first face node, corresponding to point <span class="math notranslate nohighlight">\(x_\mathrm{f} = a\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'xf_N'</span></code>: last face node, corresponding to point <span class="math notranslate nohighlight">\(x_\mathrm{f} = b\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'N_fv'</span></code>: number <span class="math notranslate nohighlight">\(N\)</span> of finite volumes (i.e. intervals) in <span class="math notranslate nohighlight">\([a,b]\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'spacing'</span></code>: type of spacing used. Current options:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'uniform'</span></code>: uniform spacing <span class="math notranslate nohighlight">\(h = (b-a)/N\)</span></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'geometric'</span></code>: spacing follows a geometric series described by <span class="math notranslate nohighlight">\(N\)</span> and the expansion ratio</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'expansion_ratio'</span></code>: ratio of one element length to the next previous element lenght <span class="math notranslate nohighlight">\(h_i/h_{i-1}\)</span>. Set to <code class="docutils literal notranslate"><span class="pre">None</span></code> if a <code class="docutils literal notranslate"><span class="pre">'uniform'</span></code> spacing is read, otherwise should be &gt; 1.</p></li>
+</ul>
+</div></blockquote>
+</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>dictionary</p>

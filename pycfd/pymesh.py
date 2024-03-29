@@ -17,8 +17,18 @@ def read_input_geom(input_file):
     Returns
     -------
     geometry : dictionary
-        Parameters describing the geometry contained in the input file
-
+        Parameters describing the geometry contained in the input file:
+            
+            - ``'xf_0'``: first face node, corresponding to point :math:`x_\mathrm{f} = a`
+            - ``'xf_N'``: last face node, corresponding to point :math:`x_\mathrm{f} = b`
+            - ``'N_fv'``: number :math:`N` of finite volumes (i.e. intervals) in :math:`[a,b]`
+            - ``'spacing'``: type of spacing used. Current options:
+                
+                - ``'uniform'``: uniform spacing :math:`h = (b-a)/N`
+                - ``'geometric'``: spacing follows a geometric series described by :math:`N` and the expansion ratio
+            
+            - ``'expansion_ratio'``: ratio of one element length to the next previous element lenght :math:`h_i/h_{i-1}`. Set to ``None`` if a ``'uniform'`` spacing is read, otherwise should be > 1.
+    
     """
 
     print('Reading geometry from \t' + os.path.abspath(input_file))
@@ -76,9 +86,9 @@ def read_input_geom(input_file):
         # move "line pointer" to the next line
         i = i + 1
     
-    geometry = {'x0': x0,
-                'xL': xL,
-                'N': N,
+    geometry = {'xf_0': x0,
+                'xf_N': xL,
+                'N_fv': N,
                 'spacing': spacing,
                 'expansion_ratio': exp_ratio
                 }
@@ -234,8 +244,11 @@ def print_mesh(mesh, mesh_file):
 
     Parameters
     ----------
-    mesh : array
-        Mesh coordinates
+    mesh : dictionary
+        Mesh coordinates:
+            
+            - ``'centroids'``: centroid coordinates :math:`x_P`
+            - ``'face_nodes'``: face centre coordinates :math:`x_\mathrm{f}`
     mesh_file : string
         Name of the file where to save the mesh
 
