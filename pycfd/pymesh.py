@@ -66,8 +66,11 @@ def read_input_geom(input_file):
             spacing = spacing.lower()
             i = i + 1
         elif line == 'EXPANSION_RATIO':
-            exp_ratio = lines[i+1].strip()
-            exp_ratio = float(exp_ratio)
+            # read the line only if the spacing is non-uniform
+            # (there's no expansion rate with uniform spacing)
+            if spacing != 'uniform':
+                exp_ratio = lines[i+1].strip()
+                exp_ratio = float(exp_ratio)
             i = i + 1
         
         # move "line pointer" to the next line
