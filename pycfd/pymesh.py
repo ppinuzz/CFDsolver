@@ -332,6 +332,40 @@ def read_mesh(mesh_file):
     return mesh
 
 
+def connect_more_meshes(mesh_files):
+    """
+    Connect sequentially more 1D meshes.
+
+    Parameters
+    ----------
+    mesh_files : array
+        List of 1D mesh files that will be connected in the SAME ORDER as they  
+        are given (e.g. if the fist mesh is `[a, b, c]` and the second is 
+        `[c, d, e]`, the final mesh will be `[a, b, c, d, e]`)
+
+    Returns
+    -------
+    total_mesh : array
+        1D mesh obtained connecting the given meshes one after the other.
+
+    """
+    
+    
+    # you don't know beforehand how many points there will be => use a list and
+    # convert it to a ndarray once you're created the entire mesh
+    total_mesh = []
+    for i, mesh_file_i in enumerate(mesh_files):
+        mesh_i = read_mesh(mesh_file_i)
+        # the meshes are [a, b], [b, c], [c, d], etc.
+        # starting from the second mesh (i == 1), remove the first point so 
+        # that you're not including it twice
+        if i > 0:
+            mesh_i = mesh_i[1:]
+        total_mesh.extend(mesh_i)       # concatenate the meshes
+    total_mesh = np.array(total_mesh)
+    
+    return total_mesh
+        
 
 def convert_raw_mesh(raw_mesh_file, mesh_file):
     """
