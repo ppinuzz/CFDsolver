@@ -22,14 +22,4 @@ mesh = pmsh.read_mesh(mesh_file)
 
 #%% VISUALISATION
 
-# N finite volumes => N centroids => N+1 face nodes
-N_fv = len(mesh['centroids'])
-x_plot_centroids = np.zeros(N_fv)
-x_plot_face_nodes = np.zeros(N_fv+1)
-plt.figure()
-plt.plot([0, 4], [0, 0], 'r')     # physical domain
-plt.plot(mesh['centroids'], x_plot_centroids, 'o', label='centroids $x_P$')
-plt.plot(mesh['face_nodes'], x_plot_face_nodes, '*', label='face nodes $x_f$')
-plt.autoscale(enable=True, axis='x', tight=True)    # MATLAB's xlim tight
-plt.legend()
-plt.show()
+pmsh.plot_mesh(mesh, print_legend=True)

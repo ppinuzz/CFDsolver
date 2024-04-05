@@ -2,7 +2,7 @@
 
 import numpy as np
 import os
-
+import matplotlib.pyplot as plt
 
 
 def read_input_geom(input_file):
@@ -364,7 +364,29 @@ def connect_more_meshes(mesh_files):
     total_mesh = np.array(total_mesh)
     
     return total_mesh
-        
+
+
+def plot_mesh(mesh, print_legend=True):
+    
+    # N centroids => N finite volumes => N+1 face nodes
+    N_centroids = len(mesh['centroids'])
+    N_face_nodes = N_centroids + 1
+    # being 1D, the mesh will have y = 0 everywhere
+    x_centroids = np.zeros(N_centroids)
+    x_face_nodes = np.zeros(N_face_nodes)
+    
+    x_a = mesh['face_nodes'][0]
+    x_b = mesh['face_nodes'][-1]
+    
+    plt.figure()
+    plt.plot([x_a, x_b], [0, 0], 'r')                   # physical domain
+    plt.plot(mesh['centroids'], x_centroids, 'o', label='centroids')
+    plt.plot(mesh['face_nodes'], x_face_nodes, '|', label='face nodes', color='g', markersize=20)
+    plt.autoscale(enable=True, axis='x', tight=True)    # MATLAB's xlim tight
+    if print_legend:
+        plt.legend()
+    plt.show()
+    
 
 # =============================================================================
 # def convert_raw_mesh(raw_mesh_file, mesh_file):
