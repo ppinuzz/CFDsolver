@@ -163,9 +163,9 @@ def mesher(input_file, mesh_file, discr_method='cellcenter'):
     """
     
     geometry = read_input_geom(input_file)
-    xf_0 = geometry['x0']
-    xf_N = geometry['xL']
-    N_fv = geometry['N']
+    xf_0 = geometry['xf_0']
+    xf_N = geometry['xf_N']
+    N_fv = geometry['N_fv']
     spacing = geometry['spacing']
     exp_ratio = geometry['expansion_ratio']
     
@@ -260,8 +260,13 @@ def print_mesh(mesh, mesh_file):
     
     print('Saving mesh to \t\t\t' + os.path.abspath(mesh_file))
     with open(mesh_file, 'w') as file:
-        file.write('COORDINATES\n')
+        file.write('CENTROID COORDINATES\n')
         np.savetxt(file, mesh['centroids'], newline='\n')
+        file.write('\n')
+    
+    with open(mesh_file, 'a') as file:
+        file.write('FACE NODES COORDINATES\n')
+        np.savetxt(file, mesh['face_nodes'], newline='\n')
 
 
 
@@ -276,7 +281,7 @@ def read_mesh(mesh_file):
 
     Returns
     -------
-    mesh : array
+    mesh : dictionary
         1D mesh
 
     """
@@ -292,42 +297,36 @@ def read_mesh(mesh_file):
     
     
     # PARSE FILE CONTENT
-    i = 0
-    while i < len(lines):
+    # remove the empty lines and those containing whitespaces (.strip() converts
+    # them to '', which evaluates to False)
+    # https://stackoverflow.com/a/3845449/17220538
+    lines = [line_i for line_i in lines if line_i.strip()]
+    mesh = {}
+    # "type" of the coordinate, to be used when filling the dictionary
+    coordinate_name = None
+    for line in lines:
         # remove eventual whitespaces (e.g. the trailing '\n' always present)
-        line = lines[i].strip()
+        line = line.strip()
         
         # format of the file:
         #   KEYWORD
         #   VALUE
         # when you find a match for a keyword, this means that the NEXT line(s)
-        # contain the numerical value.
-        #if line == 'UNIT':
-            # read content of the NEXT line (i.e. the one below the keyword)
-            #unit = lines[i+1].strip()
-            # and skip the next line by moving the counter 
-            # (since you've already read the next line, move the "line pointer"
-            # to the next line)
-            #i = i + 1
-        if line == 'COORDINATES':
-            # all the lines below are numbers
-            mesh_str = lines[i+1:]
-            # stop the loop, since the COORDINATES keyword should be the last 
-            # keyword in the file
-            break
-        
-        # move "line pointer" to the next line
-        i = i + 1
-
-    
-    # CONVERT COORDINATES INTO FLOATS
-    mesh = []
-    for line in mesh_str:
-        # remove whitespace
-        x_i = line.strip()
-        x_i = float(x_i)
-        mesh.append(x_i)
-    mesh = np.array(mesh)
+        # contain the numerical value
+        if line == 'CENTROID COORDINATES':
+            coordinate_name = 'centroids'
+            # initialise the object as an empty list, so that I can append
+            # values afterward
+            mesh[coordinate_name] = []
+        elif line == 'FACE NODES COORDINATES':
+            coordinate_name = 'face_nodes'
+            mesh[coordinate_name] = []
+        # all the lines that are not text are for sure coordinates, since empty
+        # lines have been removed
+        else:
+            # CONVERT COORDINATES INTO FLOATS
+            x_i = float(line)
+            mesh[coordinate_name].append(x_i)
     
     return mesh
 
