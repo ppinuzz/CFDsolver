@@ -366,39 +366,41 @@ def connect_more_meshes(mesh_files):
     return total_mesh
         
 
-def convert_raw_mesh(raw_mesh_file, mesh_file):
-    """
-    Convert raw coordinates into mesh format
-
-    Parameters
-    ----------
-    raw_mesh_file : string
-        Name of the file containing raw coordinates
-    mesh_file : string
-        Name of the converted mesh file
-
-    Returns
-    -------
-    None.
-
-    """
-    
-    # GET FILE CONTENT
-    with open(raw_mesh_file, 'r') as file:
-        # read without removing newlines \n
-        lines = file.readlines()
-    
-    # check that the files is not empty and does not contain only whitespaces
-    check_empty_input(lines, "ERROR: Empty mesh file")
-    
-    # CONVERSION
-    with open(mesh_file, 'w') as file:
-        file.write('COORDINATES\n')
-        # since newlines are still there, simply concatenate all the elements
-        # of the string into one (['0\n', '1\n'] becomes '0\n1\n')
-        coord = ''.join(lines)
-        # the single string thus obtained is already formatted as it should to
-        # create the .mesh file
-        file.write(coord)
+# =============================================================================
+# def convert_raw_mesh(raw_mesh_file, mesh_file):
+#     """
+#     Convert raw coordinates into mesh format
+# 
+#     Parameters
+#     ----------
+#     raw_mesh_file : string
+#         Name of the file containing raw coordinates
+#     mesh_file : string
+#         Name of the converted mesh file
+# 
+#     Returns
+#     -------
+#     None.
+# 
+#     """
+#     
+#     # GET FILE CONTENT
+#     with open(raw_mesh_file, 'r') as file:
+#         # read without removing newlines \n
+#         lines = file.readlines()
+#     
+#     # check that the files is not empty and does not contain only whitespaces
+#     check_empty_input(lines, "ERROR: Empty mesh file")
+#     
+#     # CONVERSION
+#     with open(mesh_file, 'w') as file:
+#         file.write('COORDINATES\n')
+#         # since newlines are still there, simply concatenate all the elements
+#         # of the string into one (['0\n', '1\n'] becomes '0\n1\n')
+#         coord = ''.join(lines)
+#         # the single string thus obtained is already formatted as it should to
+#         # create the .mesh file
+#         file.write(coord)
+# =============================================================================
 
 
