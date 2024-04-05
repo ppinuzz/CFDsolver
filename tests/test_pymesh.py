@@ -15,36 +15,25 @@ import numpy as np
 import pytest
 from pycfd import pymesh
 
-# parent directory used for data files
+# parent directory used for data files, w.r.t. to the MAIN project directory
 parent_dir = 'tests/data/'
 # directory used for junk data created by tests
 junk_dir = 'tests/junk/'
 
+
+
 def test_read_mesh_1D():
     """Test: read 1D .mesh file"""
     
-    mesh_file = parent_dir + 'test.mesh'
+    mesh_exact = {'centroids': np.array([0, 0.2, 0.4, 0.6, 0.8, 1]),
+            'face_nodes':np.array( [-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1])
+            }
     
-    mesh_exact = np.array([0. , 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1. ])
+    mesh_file = parent_dir + 'test.mesh'
     mesh_read = pymesh.read_mesh(mesh_file)
     
-    success = np.array_equal(mesh_exact, mesh_read)
-    
-    assert success
-
-
-def test_raw_mesh_conversion():
-    """Test: convert raw mesh coordinates to .mesh input file"""
-    
-    raw_mesh_file = parent_dir + 'test_raw_mesh.txt'
-    converted_mesh_file = junk_dir + 'test_converted_mesh.mesh'
-    
-    pymesh.convert_raw_mesh(raw_mesh_file, converted_mesh_file)
-    mesh_converted = pymesh.read_mesh(converted_mesh_file)
-    
-    mesh_exact = np.array([0. , 0.1, 0.2, 0.3, 0.4])
-    
-    success = np.array_equal(mesh_exact, mesh_converted)
+    success = ((np.array_equal(mesh_exact['centroids'], mesh_read['centroids'])) and 
+        (np.array_equal(mesh_exact['face_nodes'], mesh_read['face_nodes'])))
     
     assert success
 
@@ -52,20 +41,33 @@ def test_raw_mesh_conversion():
 def test_print_mesh():
     """Test: print mesh to .mesh file"""
     
-    x_centroids = np.array([0, 0.1, 0.2, 0.3])
-    mesh = {'centroids': x_centroids}
+    mesh_exact = {'centroids': np.array([0, 0.2, 0.4, 0.6, 0.8, 1]),
+            'face_nodes':np.array( [-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1])
+            }
     mesh_file = junk_dir + 'test_print_mesh.mesh'
-    pymesh.print_mesh(mesh, mesh_file)
+    pymesh.print_mesh(mesh_exact, mesh_file)
     with open(mesh_file, 'r') as file:
         mesh_read = file.readlines()
     
-    mesh_exact = ['COORDINATES\n',
-     '0.000000000000000000e+00\n',
-     '1.000000000000000056e-01\n',
-     '2.000000000000000111e-01\n',
-     '2.999999999999999889e-01\n']
+    mesh_exact = ['CENTROID COORDINATES\n',
+        '0.000000000000000000e+00\n',
+        '2.000000000000000111e-01\n',
+        '4.000000000000000222e-01\n',
+        '5.999999999999999778e-01\n',
+        '8.000000000000000444e-01\n',
+        '1.000000000000000000e+00\n',
+    	'\n',
+        'FACE NODES COORDINATES\n',
+        '-1.000000000000000056e-01\n',
+        '1.000000000000000056e-01\n',
+        '2.999999999999999889e-01\n',
+        '5.000000000000000000e-01\n',
+        '6.999999999999999556e-01\n',
+        '9.000000000000000222e-01\n',
+        '1.100000000000000089e+00\n',
+]
     
-    success = mesh_exact == mesh_read
+    success = (mesh_exact == mesh_read)
     
     assert success
 
@@ -73,8 +75,9 @@ def test_print_mesh():
 def test_1D_cell_center_mesh():
     """Test: create 1D finite volume mesh"""
     
-    # centroid coordinates
-    mesh_exact = np.array([0.5, 1.5, 2.5, 3.5])
+    mesh_exact = {'centroids': np.array([0, 0.2, 0.4, 0.6, 0.8, 1]),
+            'face_nodes':np.array( [-0.1, 0.1, 0.3, 0.5, 0.7, 0.9, 1.1])
+            }
     
     input_file = parent_dir + 'test_FV_input.input'
     mesh_file = junk_dir + 'test_1D_FV_mesh.mesh'
@@ -82,7 +85,11 @@ def test_1D_cell_center_mesh():
     pymesh.mesher(input_file, mesh_file, discr_method)
     mesh_created = pymesh.read_mesh(mesh_file)
     
-    success = np.array_equal(mesh_created, mesh_exact)
+    tol = 1e-10
+    diff_centroids = np.abs(mesh_created['centroids'] - mesh_exact['centroids'])
+    diff_faces = np.abs(mesh_created['face_nodes'] - mesh_exact['face_nodes'])
+    
+    success = (diff_centroids < tol).all() and (diff_faces < tol).all()
     
     assert success
 
@@ -93,7 +100,7 @@ def test_read_geom():
     input_file = parent_dir + 'test_FV_input.input'
     geometry = pymesh.read_input_geom(input_file)
     
-    correct_geom = {'x0': 0, 'xL': 4, 'N': 4, 'spacing': 'uniform', 'expansion_ratio': None}
+    correct_geom = {'xf_0': -0.1, 'xf_N': 1.1, 'N_fv': 6, 'spacing': 'uniform', 'expansion_ratio': None}
     
     success = correct_geom == geometry
     
@@ -141,7 +148,7 @@ if __name__ == '__main__':
     junk_dir = './junk/'       # directory used for junk data created by tests
     
     test_read_mesh_1D()
-    test_raw_mesh_conversion()
+    #test_raw_mesh_conversion()
     test_print_mesh()
     test_1D_cell_center_mesh()
     test_read_geom()

@@ -75,7 +75,7 @@ def read_input_geom(input_file):
             spacing = lines[i+1].strip()
             spacing = spacing.lower()
             i = i + 1
-        elif line == 'EXPANSION_RATIO':
+        elif line == 'EXPANSION RATIO':
             # read the line only if the spacing is non-uniform
             # (there's no expansion rate with uniform spacing)
             if spacing != 'uniform':
@@ -327,6 +327,10 @@ def read_mesh(mesh_file):
             # CONVERT COORDINATES INTO FLOATS
             x_i = float(line)
             mesh[coordinate_name].append(x_i)
+    
+    # turn everything into a NumPy array
+    mesh['centroids'] = np.array(mesh['centroids'])
+    mesh['face_nodes'] = np.array(mesh['face_nodes'])
     
     return mesh
 
