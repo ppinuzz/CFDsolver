@@ -11,8 +11,6 @@ The idea is to create a CFD solver from scratch, similar to OpenFOAM
 ```mermaid
 flowchart TD
     start([start]) --> geomInput[\*.input\] 
-    start -.-> rawInput[\raw_input.txt\]
-    rawInput -.-> mesher
     geomInput --> mesher
     subgraph mesher ["mesher()"]
         direction TB
@@ -40,18 +38,25 @@ N
 
 SPACING
 uniform
+
+EXPANSION_RATIO
+1.2
 ```
 
 
 ### Mesh ###
-- the LAST keyword-value(s) entry in the `.mesh` file must be `COORDINATES` (the code assumes that from `COORDINATES` onward there are only numbers and nothing more)
 
 #### .mesh file format ####
 ```
-COORDINATES
+CENTROID COORDINATES
 0
 0.1
 0.2
+
+FACE NODES COORDINATES
+-0.05
+0.05
+0.15
 ```
 
 ## Commit messages legend ##
