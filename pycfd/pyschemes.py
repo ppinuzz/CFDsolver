@@ -6,7 +6,7 @@ from pycfd import pymesh
 
 def parse_terms(terms_file):
     
-    print('Reading terms from \t' + os.path.abspath(terms_file))
+    print('Reading terms from \t\t' + os.path.abspath(terms_file))
     with open(terms_file, 'r') as file:
         lines = file.readlines()
 
