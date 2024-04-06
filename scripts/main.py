@@ -6,6 +6,7 @@ import context
 # submodules are NOT imported by default, you have to import them explicitly
 # (https://stackoverflow.com/a/8899345/17220538)
 import pycfd.pymesh as pmsh
+import pycfd.pyschemes as psch
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -15,9 +16,11 @@ import numpy as np
 sample_folder = '../samplerun/'
 geo_file = sample_folder + '/geometry.input'
 mesh_file = sample_folder + 'sample.mesh'
-
 pmsh.mesher(geo_file, mesh_file)
 mesh = pmsh.read_mesh(mesh_file)
+
+terms_file = sample_folder + 'sample.terms'
+terms = psch.parse_terms(terms_file)
 
 
 #%% VISUALISATION

@@ -1,0 +1,11 @@
+UNSTEADY
+True
+
+CONVECTIVE
+True
+
+DIFFUSIVE
+True
+
+SOURCE 
+False
