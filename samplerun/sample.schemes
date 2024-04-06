@@ -1,0 +1,12 @@
+UNSTEADY
+default: EulerImplicit
+energy: EulerImplicit2
+
+CONVECTIVE
+True
+
+DIFFUSIVE
+True
+
+SOURCE 
+False

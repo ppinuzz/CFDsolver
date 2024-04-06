@@ -22,6 +22,9 @@ mesh = pmsh.read_mesh(mesh_file)
 terms_file = sample_folder + 'sample.terms'
 terms = psch.parse_terms(terms_file)
 
+schemes_file = sample_folder + 'sample.schemes'
+unsteady = psch.parse_unsteady_scheme(schemes_file)
+
 
 #%% VISUALISATION
 
